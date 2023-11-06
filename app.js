@@ -7,6 +7,8 @@ var userRouter = require('./routes/users')
 var verifyToken = require('./middlewares/authorization')
 var studentRouter = require('./routes/students')
 var authRouter = require('./routes/authorization')
+var matiereRouter = require('./routes/matiere')
+var noteRouter = require('./routes/note')
  const db = require('./config/db');
 const dotenv = require('dotenv') 
 
@@ -37,6 +39,8 @@ app.use('/', userRouter)
 app.use('/login',  userRouter)
 app.use('/student', studentRouter)
 app.use('/auth', authRouter)
+app.use('/getMatiere', matiereRouter)
+app.use('/note', noteRouter)
 
 
 
