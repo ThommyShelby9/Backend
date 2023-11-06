@@ -1,10 +1,8 @@
 const mongoose = require('mongoose')
 
 const StudentSchema = mongoose.Schema({
-    id:{
-        type: Number,
-        require:true,
-        unique:true
+    student_id: {
+        type: String,
     },
     firstname: {
         type: String,
@@ -17,6 +15,7 @@ const StudentSchema = mongoose.Schema({
     email:{
         type: String,
         require:true,
+        unique: true
     },
     old:{
         type: Number,

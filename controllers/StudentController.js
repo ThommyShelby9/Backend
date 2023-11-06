@@ -1,19 +1,11 @@
 const StudentModel = require('../models/students')
-const Counter = require('../models/counter')
-async function getNextSequenceValue(sequenceName) {
-    const sequenceDocument = await Counter.findOneAndUpdate(
-      { id: Counter },
-      { $inc: { sequence_value: 1 } },
-      { new: true, upsert: true }
-    );
-  
-    return sequenceDocument.sequence_value;
-  }
+const uuid = require('uuid')
+
+
 
 async function addStudent(req, res, next){
-    const id = await getNextSequenceValue("studentId");
     const newStudent = new StudentModel ( {
-        idStudent : id,
+        student_id: uuid.v4(),
         firstname: req.body.firstname,
         lastname: req.body.lastname,
         email: req.body.email,
@@ -32,4 +24,22 @@ async function addStudent(req, res, next){
     }
 }
 
-module.exports = {addStudent}
+async function searchStudent(){
+    const { searchQuery } = req.query;
+
+    try {
+        const students = await StudentModel.find({
+            $or: [
+                { firstname: { $regex: searchQuery, $options: 'i' } }, 
+                { lastname: { $regex: searchQuery, $options: 'i' } } 
+            ]
+        });
+
+        res.status(200).json(students);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Erreur lors de la recherche des étudiants.' });
+    }
+}
+
+module.exports = {addStudent, searchStudent}
